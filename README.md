@@ -10,7 +10,7 @@ Yeh ek **shell script** (`as.sh`) hai jo automatically ek **Blockchain Smart Con
 
 ## Blockchain Kya Hoti Hai? (Kid-friendly 🎈)
 
-Socho ek **public diary** jo duniya ke hazaron computers par ek saath store hai. Isme ek baar kuch likhdo, toh koi bhi mita nahi sakta. Smart contract usi diary ka ek **automatic program** hota hai — jab sahi condition aaye, khud kaam karta hai, bina kisi insaan ke.
+Socho ek **public diary** jo duniya ke hazaron computers par ek saath store hai. Isme ek baar kuch likh do, toh koi bhi mita nahi sakta. Smart contract usi diary ka ek **automatic program** hota hai — jab sahi condition aaye, khud kaam karta hai, bina kisi insaan ke.
 
 ---
 
@@ -84,7 +84,7 @@ Encrypted getMessage() call karo → Message screen pe aaya!
 | **Private key directly `.env` mein save hoti hai** — thoda risky | `.env` file ko `.gitignore` mein daalo taaki accidentally GitHub pe upload na ho |
 | **Koi tests nahi hain** | Hardhat ke saath `test/` folder mein tests likho |
 | **Script mein error handling nahi** | Agar koi step fail ho, toh script ruk jaye aur clear error bataye |
-| **Message hardcoded hai** | Script run karte waqt user se message input lo |
+| **Message hardcoded hai** | `as.sh` mein `read -p "Enter your message: " USER_MSG` add karo aur `deploy.js` / `setMessage.js` mein `process.env.USER_MSG` ya command-line argument se paas karo |
 | **README nahi tha** | ✅ Ab hai! (yeh file) |
 
 ---
