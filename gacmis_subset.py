@@ -165,7 +165,7 @@ def init_other_pool(languages: list[str]) -> dict[str, list[dict]]:
 
 
 def ensure_parent_dir(path: str) -> None:
-    directory = os.path.dirname(os.path.abspath(path)) or "."
+    directory = os.path.dirname(os.path.abspath(path))
     os.makedirs(directory, exist_ok=True)
 
 
@@ -326,7 +326,7 @@ def main() -> int:
             row["license"] = record.get(license_field) or ""
         rows.append(row)
 
-    created_at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    created_at = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="microseconds").replace("+00:00", "Z")
     manifest = {
         "created_at": created_at,
         "input": os.path.abspath(args.input),
