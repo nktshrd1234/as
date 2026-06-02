@@ -4,7 +4,7 @@ This repository includes a small utility to inspect GACMIS metadata and build a 
 
 ## Prerequisites
 
-- Python 3.10+
+- Python 3.10+ (required for PEP 604 union type hints used in the script)
 
 ## Inspect the dataset fields
 
