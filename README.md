@@ -9,7 +9,7 @@ This repository includes a small utility to inspect GACMIS metadata and build a 
 ## Inspect the dataset fields
 
 ```bash
-python /tmp/workspace/nktshrd1234/as/gacmis_subset.py \
+python gacmis_subset.py \
   --input /path/to/gacmis_metadata.csv \
   --inspect --inspect-only
 ```
@@ -19,7 +19,7 @@ This prints available fields and sample counts so you can confirm which columns 
 ## Create a balanced subset
 
 ```bash
-python /tmp/workspace/nktshrd1234/as/gacmis_subset.py \
+python gacmis_subset.py \
   --input /path/to/gacmis_metadata.csv \
   --language-field language \
   --genre-field genre \
