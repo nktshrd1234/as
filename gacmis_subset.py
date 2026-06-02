@@ -313,8 +313,9 @@ def main() -> int:
             row["license"] = record.get(license_field) or ""
         rows.append(row)
 
+    created_at = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
     manifest = {
-        "created_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "created_at": created_at,
         "input": os.path.abspath(args.input),
         "output": os.path.abspath(args.output),
         "manifest": os.path.abspath(args.manifest),
