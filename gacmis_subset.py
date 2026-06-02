@@ -156,6 +156,14 @@ def assign_genre(value: object, targets: list[str], allow_subgenres: bool) -> st
     return None
 
 
+def init_buckets(languages: list[str], genres: list[str]) -> dict[str, dict[str, list[dict]]]:
+    return {lang: {genre: [] for genre in genres} for lang in languages}
+
+
+def init_other_pool(languages: list[str]) -> dict[str, list[dict]]:
+    return {lang: [] for lang in languages}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Select balanced Hindi/Punjabi subsets from GACMIS metadata.")
     parser.add_argument("--input", required=True, help="Path to the dataset metadata file (CSV/TSV/JSON/JSONL)")
@@ -215,6 +223,9 @@ def main() -> int:
             raise ValueError("Not enough genres found to auto-select three; pass --genres explicitly")
         target_genres = [genre for genre, _ in genre_counter.most_common(3)]
 
+    if not languages or not target_genres:
+        raise ValueError("Languages and genres must be non-empty")
+
     genre_count = len(target_genres)
     per_genre = args.per_genre
     per_language = args.per_language
@@ -226,8 +237,8 @@ def main() -> int:
         per_language = per_genre * genre_count
 
     rng = random.Random(args.seed)
-    buckets: dict[str, dict[str, list[dict]]] = {lang: {genre: [] for genre in target_genres} for lang in languages}
-    other_pool: dict[str, list[dict]] = {lang: [] for lang in languages}
+    buckets = init_buckets(languages, target_genres)
+    other_pool = init_other_pool(languages)
     language_set = {normalize(lang): lang for lang in languages}
 
     for record in records:
@@ -313,7 +324,7 @@ def main() -> int:
             row["license"] = record.get(license_field) or ""
         rows.append(row)
 
-    created_at = datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
+    created_at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     manifest = {
         "created_at": created_at,
         "input": os.path.abspath(args.input),
