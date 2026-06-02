@@ -149,9 +149,11 @@ def assign_genre(value: object, targets: list[str], allow_subgenres: bool) -> st
     for target in targets:
         target_norm = normalize(target)
         for token in tokens:
+            token_words = token.split()
+            target_words = target_norm.split()
             if token == target_norm:
                 return target
-            if allow_subgenres and (target_norm in token or token in target_norm):
+            if allow_subgenres and (target_norm in token_words or token in target_words):
                 return target
     return None
 
@@ -233,7 +235,9 @@ def main() -> int:
     per_language = args.per_language
     if per_genre is None:
         if per_language % genre_count != 0:
-            raise ValueError("per-language must be divisible by number of genres or specify --per-genre")
+            raise ValueError(
+                f\"per-language ({per_language}) must be divisible by number of genres ({genre_count}), or specify --per-genre\"
+            )
         per_genre = per_language // genre_count
     else:
         per_language = per_genre * genre_count
@@ -326,7 +330,7 @@ def main() -> int:
             row["license"] = record.get(license_field) or ""
         rows.append(row)
 
-    created_at = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="microseconds").replace("+00:00", "Z")
+    created_at = datetime.datetime.now(datetime.timezone.utc).strftime(\"%Y-%m-%dT%H:%M:%S.%fZ\")
     manifest = {
         "created_at": created_at,
         "input": os.path.abspath(args.input),
