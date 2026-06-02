@@ -164,6 +164,11 @@ def init_other_pool(languages: list[str]) -> dict[str, list[dict]]:
     return {lang: [] for lang in languages}
 
 
+def ensure_parent_dir(path: str) -> None:
+    directory = os.path.dirname(os.path.abspath(path)) or "."
+    os.makedirs(directory, exist_ok=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Select balanced Hindi/Punjabi subsets from GACMIS metadata.")
     parser.add_argument("--input", required=True, help="Path to the dataset metadata file (CSV/TSV/JSON/JSONL)")
@@ -321,9 +326,7 @@ def main() -> int:
             row["license"] = record.get(license_field) or ""
         rows.append(row)
 
-    created_at = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="microseconds")
-    if created_at.endswith("+00:00"):
-        created_at = created_at[:-6] + "Z"
+    created_at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     manifest = {
         "created_at": created_at,
         "input": os.path.abspath(args.input),
@@ -350,8 +353,8 @@ def main() -> int:
         print(json.dumps(manifest, indent=2))
         return 0
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.output)) or ".", exist_ok=True)
-    os.makedirs(os.path.dirname(os.path.abspath(args.manifest)) or ".", exist_ok=True)
+    ensure_parent_dir(args.output)
+    ensure_parent_dir(args.manifest)
 
     with open(args.output, "w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=output_fields)
